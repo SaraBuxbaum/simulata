@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import { ArrowLeft, Clock, ChevronDown, ChevronUp, CheckCircle2, XCircle, AlertCircle, RotateCcw } from "lucide-react";
-import { connectRunWs, getRun, getRunEvents, runScenario, type WsInitMessage, type RunReport } from "../api/index";
+import { connectRunWs, getRun, getRunEvents, runScenario, type WsInitMessage, type RunReport } from "../api";
 import { useToast } from "../components/Toast";
 import StatusBadge from "../components/StatusBadge";
 import TopicStats from "../components/TopicStats";

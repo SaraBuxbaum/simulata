@@ -45,3 +45,17 @@ export async function createSimulation(payload: CreateSimulationPayload): Promis
   const { data } = await client.post('/simulations', payload);
   return data;
 }
+
+export async function updateSimulation(id: string, payload: Partial<CreateSimulationPayload>): Promise<SimulationConfig> {
+  const { data } = await client.put(`/simulations/${id}`, payload);
+  return data;
+}
+
+export async function deleteSimulation(id: string): Promise<void> {
+  await client.delete(`/simulations/${id}`);
+}
+
+export async function runSimulation(id: string): Promise<{ run_id: string; status: string }> {
+  const { data } = await client.post(`/simulations/${id}/run`);
+  return data;
+}

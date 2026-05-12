@@ -2,6 +2,7 @@ import { Request, Response } from 'express';
 import { readFile, writeFile } from 'fs/promises';
 import { fileURLToPath } from 'url';
 import { join, dirname } from 'path';
+import { publishSimulationRun } from '../rabbitmq/index.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const filePath = join(__dirname, '../data/simulations.json');
@@ -33,25 +34,65 @@ export async function getSimulationById(req: Request, res: Response): Promise<vo
   }
 }
 
-export async function createSimulation(req: Request, res: Response): Promise<void> {
-  console.log("📥 Received new simulation at Server:", JSON.stringify(req.body, null, 2));
+export async function updateSimulation(req: Request, res: Response): Promise<void> {
   try {
-    const { scenario_name, simulation_config_id, productions } = req.body;
-    if (!scenario_name) {
-      res.status(400).json({ error: 'scenario_name is required' });
+    const simulations = await readSimulations();
+    const index = simulations.findIndex((s) => s.simulation_config_id === req.params.id);
+    if (index === -1) { res.status(404).json({ error: 'Simulation not found' }); return; }
+    simulations[index] = { ...simulations[index], ...req.body, simulation_config_id: req.params.id };
+    await writeFile(filePath, JSON.stringify(simulations, null, 2), 'utf-8');
+    res.json(simulations[index]);
+  } catch {
+    res.status(500).json({ error: 'Failed to update simulation' });
+  }
+}
+
+export async function deleteSimulation(req: Request, res: Response): Promise<void> {
+  try {
+    const simulations = await readSimulations();
+    const filtered = simulations.filter((s) => s.simulation_config_id !== req.params.id);
+    if (filtered.length === simulations.length) { res.status(404).json({ error: 'Simulation not found' }); return; }
+    await writeFile(filePath, JSON.stringify(filtered, null, 2), 'utf-8');
+    res.status(204).send();
+  } catch {
+    res.status(500).json({ error: 'Failed to delete simulation' });
+  }
+}
+export async function runSimulation(req: Request, res: Response): Promise<void> {
+  try {
+    const simulations = await readSimulations();
+    const simulation = simulations.find((s) => s.simulation_config_id === req.params.id);
+    if (!simulation) {
+      res.status(404).json({ error: 'Simulation not found' });
       return;
     }
-    const simulations = await readSimulations();
-    const newSimulation = {
-      simulation_config_id: simulation_config_id || crypto.randomUUID(),
-      scenario_name,
-      created_at: new Date().toISOString(),
-      productions: productions ?? [],
-    };
-    simulations.push(newSimulation);
-    await writeFile(filePath, JSON.stringify(simulations, null, 2), 'utf-8');
-    res.status(201).json(newSimulation);
-  } catch {
-    res.status(500).json({ error: 'Failed to create simulation' });
+    const runId = crypto.randomUUID();
+    const message = publishSimulationRun(simulation, runId);
+    res.status(202).json({ run_id: runId, status: 'queued', message });
+  } catch (err: any) {
+    res.status(500).json({ error: err.message ?? 'Failed to publish simulation run' });
   }
+}
+
+export async function createSimulation(req: Request, res: Response): Promise<void> {
+  console.log("Received new simulation at Server:", JSON.stringify(req.body, null, 2));
+    try {
+      const { scenario_name, simulation_config_id, productions } = req.body;
+      if (!scenario_name) {
+        res.status(400).json({ error: 'scenario_name is required' });
+        return;
+      }
+      const simulations = await readSimulations();
+      const newSimulation = {
+        simulation_config_id: simulation_config_id || crypto.randomUUID(),
+        scenario_name,
+        created_at: new Date().toISOString(),
+        productions: productions ?? [],
+      };
+      simulations.push(newSimulation);
+      await writeFile(filePath, JSON.stringify(simulations, null, 2), 'utf-8');
+      res.status(201).json(newSimulation);
+    } catch {
+      res.status(500).json({ error: 'Failed to create simulation' });
+    }
 }

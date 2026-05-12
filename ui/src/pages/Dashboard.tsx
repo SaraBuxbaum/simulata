@@ -9,15 +9,9 @@ import {
   Clock,
   Plus
 } from "lucide-react";
-import { 
-  getStats, 
-  listRuns, 
-  runScenario, 
-  type RunInfo, 
-  type Stats 
-} from "../api/index";
+import { getStats, listRuns, type RunInfo, type Stats } from "../api";
 import { useToast } from "../components/Toast";
-import { getAllSimulations, type SimulationConfig } from "../api/index";
+import { getAllSimulations, runSimulation, type SimulationConfig } from "../api/index";
 
 function StatCard({ label, value, icon: Icon }: { label: string; value: string | number; icon: any }) {
   return (
@@ -68,17 +62,13 @@ export default function Dashboard() {
   }, []);
 
   const handleRun = async (id: string, name: string) => {
-    // עדכון: חיפוש לפי ה-ID החדש
     const scenario = simulations.find(s => s.simulation_config_id === id);
-    
-    // עדכון: בדיקה אם קיימים 'productions' (המבנה החדש במקום scenario_config)
-    if (!scenario || !scenario.productions || scenario.productions.length === 0) {
+    if (!scenario?.productions?.length) {
       toast(`Cannot run "${name}": No productions configured.`, "error");
       return;
     }
-
     try {
-      const result = await runScenario(id);
+      const result = await runSimulation(id);
       toast(`Simulation "${name}" started`, "info");
       navigate(`/run/${result.run_id}`, { state: { simName: name } });
     } catch (err: any) {

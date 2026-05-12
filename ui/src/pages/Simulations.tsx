@@ -250,26 +250,21 @@
 
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { Plus, Play, Trash2, Upload, Activity, Database, Search } from 'lucide-react';
+import { Plus, Play, Trash2, Pencil, Upload, Activity, Database, Search } from 'lucide-react';
 
-// עדכון האימפורטים לשימוש ב-API החדש
 import { 
-  getAllSimulations, // הפונקציה החדשה
-  listProfiles, 
-  deleteScenario, 
-  runScenario, 
+  getAllSimulations,
+  deleteSimulation,
+  runSimulation,
   importYamlSimulation, 
-  type SimulationConfig, // הטיפוס החדש
-  type ProfileInfo 
+  type SimulationConfig,
 } from "../api/index";
 
 const Simulations: React.FC = () => {
   const navigate = useNavigate();
   const yamlInputRef = useRef<HTMLInputElement>(null);
   
-  // עדכון ה-State לטיפוס החדש
   const [simulations, setSimulations] = useState<SimulationConfig[]>([]);
-  const [profiles, setProfiles] = useState<ProfileInfo[]>([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState("");
   const [importing, setImporting] = useState(false);
@@ -277,12 +272,7 @@ const Simulations: React.FC = () => {
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
-      const [sims, pros] = await Promise.all([
-        getAllSimulations(), // קריאה לשרת האמיתי
-        listProfiles()
-      ]);
-      setSimulations(sims);
-      setProfiles(pros);
+      setSimulations(await getAllSimulations());
     } catch (error) {
       console.error("Failed to fetch data:", error);
     } finally {
@@ -312,9 +302,9 @@ const Simulations: React.FC = () => {
   };
 
   const handleDelete = async (id: string) => {
-    if (window.confirm("האם את בטוחה שברצונך למחוק את הסימולציה?")) {
+    if (window.confirm("האם אתה בטוח שברצונך למחוק את הסימולציה?")) {
       try {
-        await deleteScenario(id);
+        await deleteSimulation(id);
         await loadData();
       } catch (error) {
         alert("שגיאה במחיקת הסימולציה");
@@ -324,15 +314,12 @@ const Simulations: React.FC = () => {
 
   const handleRun = async (id: string, scenarioName: string) => {
     const scenario = simulations.find(s => s.simulation_config_id === id);
-    
-    // בדיקה לפי המבנה החדש (productions במקום scenario_config)
-    if (!scenario || !scenario.productions || scenario.productions.length === 0) {
+    if (!scenario?.productions?.length) {
       alert(`Cannot run "${scenarioName}": No configurations defined.`);
       return;
     }
-
     try {
-      const result = await runScenario(id);
+      const result = await runSimulation(id);
       navigate(`/run/${result.run_id}`);
     } catch (error: any) {
       alert(`Failed to run simulation: ${error.message}`);
@@ -403,8 +390,7 @@ const Simulations: React.FC = () => {
           return (
             <div 
               key={s.simulation_config_id} 
-              onClick={() => navigate(`/edit-simulation/${s.simulation_config_id}`)}
-              className="bg-white border border-slate-200 rounded-[24px] p-5 shadow-sm hover:shadow-md transition-shadow cursor-pointer relative group"
+              className="bg-white border border-slate-200 rounded-[24px] p-5 shadow-sm hover:shadow-md transition-shadow relative group"
             >
               <div className="flex justify-between items-start mb-4">
                 <div className="p-3 bg-[#f0eeff] rounded-xl text-[#5c4cf4]">
@@ -457,17 +443,23 @@ const Simulations: React.FC = () => {
                 </div>
               )}
 
-              <button 
-                onClick={(e) => {
-                  e.stopPropagation(); 
-                  handleRun(s.simulation_config_id, s.scenario_name);
-                }}
-                disabled={!hasActions}
-                className="w-full flex items-center justify-center gap-2 bg-[#37A8D8] text-white py-3 rounded-lg hover:bg-[#2e8db6] disabled:opacity-50 font-medium text-[16px] transition-colors"
-              >
-                <Play size={18} fill="currentColor" />
-                Run
-              </button>
+              <div className="flex gap-2">
+                <button 
+                  onClick={(e) => { e.stopPropagation(); navigate(`/edit-simulation/${s.simulation_config_id}`); }}
+                  className="flex-1 flex items-center justify-center gap-2 bg-white border border-slate-200 text-slate-700 py-3 rounded-lg hover:bg-slate-50 hover:border-slate-300 font-medium text-[16px] transition-colors"
+                >
+                  <Pencil size={16} />
+                  Edit
+                </button>
+                <button 
+                  onClick={(e) => { e.stopPropagation(); handleRun(s.simulation_config_id, s.scenario_name); }}
+                  disabled={!hasActions}
+                  className="flex-1 flex items-center justify-center gap-2 bg-[#37A8D8] text-white py-3 rounded-lg hover:bg-[#2e8db6] disabled:opacity-50 font-medium text-[16px] transition-colors"
+                >
+                  <Play size={18} fill="currentColor" />
+                  Run
+                </button>
+              </div>
             </div>
           );
         })}

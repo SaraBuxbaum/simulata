@@ -399,7 +399,8 @@ export async function listRuns(opts?: { limit?: number; simulation_name?: string
 
 export async function getRun(id: string): Promise<RunInfo & { config_snapshot: Record<string, any> }> {
   await delay();
-  const run = MOCK_RUNS.find((r) => r.id === id) ?? MOCK_RUNS[0];
+  const run = MOCK_RUNS.find((r) => r.id === id);
+  if (!run) throw new Error('Run not found');
   return { ...run, config_snapshot: MOCK_CONFIG };
 }
 
@@ -570,7 +571,6 @@ export function connectRunWs(
       clearInterval(interval);
       onComplete({
         status: "passed",
-        duration_seconds: 3.21,
         errors: [],
         summary: { topic_stats: { SensorData: { sent: 100, received: 98, lost: 2, loss_percent: 2.0 } } },
         report: {

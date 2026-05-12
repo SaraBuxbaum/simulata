@@ -7,10 +7,11 @@ import {
 import { useToast } from '../components/Toast';
 import { 
   createSimulation, 
+  updateSimulation,
   getAllSimulations 
 } from '../api/index';
-import { listSystems, listDictionaries } from '../api/index';
-import type { SystemInfo, Dictionary } from '../api/index';
+import { listSystems, listDictionaries } from '../api';
+import type { SystemInfo, Dictionary } from '../api';
 
 // ─── Local-only types (UI state, never sent to server) ────────────────────────
 
@@ -73,22 +74,30 @@ const NewSimulation = () => {
 
         if (!isEditMode) return;
         const scenario = scenarios.find(
-          (s) => String(s.simulation_config_id ).trim() === String(id).trim()
+          (s) => String(s.simulation_config_id).trim() === String(id).trim()
         );
         if (!scenario) return;
 
         setScenarioName(scenario.scenario_name || '');
-const config = scenario as any;
-        if (!config) return;
-        setLatency(config.transport_latency_ms || 0);
-        setJitter(config.transport_jitter_ms || 0);
-        if (config.assertions) {
-          const types = config.assertions.map((a: any) => a.type);
-          setAssertions({
-            deliveryComplete: types.includes('delivery_complete'),
-            noErrors: types.includes('no_errors'),
-            allMatched: types.includes('all_matched'),
-          });
+
+        if (scenario.productions?.length) {
+          setActiveSystems(
+            scenario.productions.map((prod: any, idx: number) => ({
+              id: String(idx + 1),
+              selectedSystemId: '',
+              selectedDictId: '',
+              interfaces: (prod.contracts || []).map((c: any) => {
+                const isWriter = !!c.dataWriter;
+                const cfg = c.dataWriter || c.dataReader || {};
+                return {
+                  id: c.contract_config_id || `int-${Date.now()}-${Math.random()}`,
+                  type: (isWriter ? 'Writer' : 'Reader') as 'Writer' | 'Reader',
+                  messageCount: cfg.message_count ?? 100,
+                  frequencyHz: cfg.message_frequency_hz ?? 10,
+                };
+              }),
+            }))
+          );
         }
       } catch {
         toast('Failed to load scenario data', 'error');
@@ -163,7 +172,11 @@ const config = scenario as any;
 
       console.log("🚀 Sending Payload to Server:", JSON.stringify(payload, null, 2));
 
-      await createSimulation(payload as any);
+      if (isEditMode && id) {
+        await updateSimulation(id, payload as any);
+      } else {
+        await createSimulation(payload as any);
+      }
       toast(isEditMode ? 'Updated successfully!' : 'Saved successfully!', 'success');
       navigate('/simulations');
     } catch {
@@ -264,7 +277,7 @@ const config = scenario as any;
                           </div>
 
                           <div className="pt-4 border-t border-slate-200">
-                            {!sys.selectedSystemId ? (
+                            {!sys.selectedSystemId && sys.interfaces.length === 0 ? (
                               <div className="py-4 text-center">
                                 <p className="text-[10px] font-bold text-red-500 mb-2 animate-pulse">! SELECT SYSTEM FIRST</p>
                                 <div className="py-3 border-2 border-dashed border-slate-200 rounded text-slate-300 flex items-center justify-center gap-2">
@@ -285,7 +298,7 @@ const config = scenario as any;
                                   </select>
                                 </div>
 
-                                {sys.selectedDictId && (
+                                {(sys.selectedDictId || sys.interfaces.length > 0) && (
                                   <div className="space-y-3 pt-2">
                                     <label className="block text-[9px] font-black text-slate-400 uppercase tracking-tighter">Active Interfaces</label>
                                     {sys.interfaces.map((int) => (

@@ -3,13 +3,9 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { Filter, ArrowUpDown, ChevronDown } from "lucide-react";
 // עדכון האימפורטים: שימוש ב-getAllSimulations ובטיפוס החדש
-import { 
-  listRuns, 
-  getAllSimulations, 
-  type RunInfo, 
-  type SimulationConfig 
-} from "../api/index";
-import StatusBadge from "../components/StatusBadge";
+import { listRuns, type RunInfo } from "../api";
+import { getAllSimulations, type SimulationConfig } from "../api/index";
+import StatusBadge, { RunStatus } from "../components/StatusBadge";
 
 type SortKey = "simulation_name" | "status" | "duration_seconds" | "total_events" | "error_count" | "started_at";
 type SortDir = "asc" | "desc";
@@ -126,10 +122,9 @@ export default function History() {
               className="appearance-none bg-white border border-slate-200 rounded-[6px] pl-4 pr-10 py-2 text-xs font-bold text-navy-950 focus:border-navy-950 outline-none cursor-pointer min-w-[160px] transition-all"
             >
               <option value="">All statuses</option>
-              <option value="passed">Passed</option>
-              <option value="failed">Failed</option>
-              <option value="error">Error</option>
-              <option value="timeout">Timeout</option>
+              <option value={RunStatus.PASSED}>Passed</option>
+              <option value={RunStatus.FAILED}>Failed</option>
+              <option value={RunStatus.RUNNING}>Running</option>
             </select>
             <ChevronDown size={14} className="absolute right-3 top-1/2 -translate-y-1/2 text-slate-400 pointer-events-none" />
           </div>

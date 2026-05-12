@@ -6,7 +6,5 @@ const router = Router({ mergeParams: true });
 router.get('/', getAllRuns);
 router.get('/:id', getRunById);
 
-// nested: /api/simulations/:simulationId/runs
-router.get('/simulations/:simulationId/runs', getRunsBySimulation);
-
+export { getRunsBySimulation };
 export default router;

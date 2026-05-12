@@ -1,6 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { Upload, Trash2, Eye, Network, AlertTriangle, ChevronRight } from "lucide-react";
-import { listProfiles, createProfile, deleteProfile, getProfileTopology, fetchProfileXml, type ProfileInfo, type TopologyInfo } from "../api/index";
+import { listProfiles, createProfile, deleteProfile, getProfileTopology, fetchProfileXml, type ProfileInfo, type TopologyInfo } from "../api";
 import { useToast } from "../components/Toast";
 
 export default function Profiles() {
