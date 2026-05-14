@@ -1,0 +1,122 @@
+[
+  {
+    "simulation_config_id": "sim-1",
+    "scenario_name": "Radar_to_C2_Test",
+    "system1_id": "sys-1",
+    "system2_id": "sys-2",
+    "configuration_details": {
+      "selected_contracts": [
+        "cont-1",
+        "cont-3"
+      ],
+      "dr_ids": [
+        "dr-1",
+        "dr-3"
+      ],
+      "dw_ids": [
+        "dw-1",
+        "dw-3"
+      ]
+    },
+    "created_at": "2026-05-14T08:00:00Z"
+  },
+  {
+    "simulation_config_id": "sim-2",
+    "scenario_name": "C2_to_Weapon_Launch",
+    "system1_id": "sys-2",
+    "system2_id": "sys-3",
+    "configuration_details": {
+      "selected_contracts": [
+        "cont-3",
+        "cont-4"
+      ],
+      "dr_ids": [
+        "dr-3",
+        "dr-4"
+      ],
+      "dw_ids": [
+        "dw-3",
+        "dw-4"
+      ]
+    },
+    "created_at": "2026-05-14T09:15:00Z"
+  },
+  {
+    "simulation_config_id": "sim-3",
+    "scenario_name": "Drone_Swarm_Surveillance",
+    "system1_id": "sys-4",
+    "system2_id": "sys-5",
+    "configuration_details": {
+      "selected_contracts": [
+        "cont-5"
+      ],
+      "dr_ids": [
+        "dr-5"
+      ],
+      "dw_ids": [
+        "dw-5"
+      ]
+    },
+    "created_at": "2026-05-14T10:30:00Z"
+  },
+  {
+    "simulation_config_id": "sim-4",
+    "scenario_name": "Full_Stress_Test_Radar",
+    "system1_id": "sys-1",
+    "system2_id": "sys-5",
+    "configuration_details": {
+      "selected_contracts": [
+        "cont-1",
+        "cont-2"
+      ],
+      "dr_ids": [
+        "dr-1",
+        "dr-2"
+      ],
+      "dw_ids": [
+        "dw-1",
+        "dw-2"
+      ]
+    },
+    "created_at": "2026-05-14T11:45:00Z"
+  },
+  {
+    "simulation_config_id": "sim-5",
+    "scenario_name": "C2_Failover_Scenario",
+    "system1_id": "sys-2",
+    "system2_id": "sys-2",
+    "configuration_details": {
+      "selected_contracts": [
+        "cont-3"
+      ],
+      "dr_ids": [
+        "dr-3"
+      ],
+      "dw_ids": [
+        "dw-3"
+      ]
+    },
+    "created_at": "2026-05-14T12:00:00Z"
+  },
+  {
+    "simulation_config_id": "7486ff93-b521-4333-a786-cd095493c5a8",
+    "scenario_name": "Integration_Test_Radar_C2",
+    "system1_id": "sys-1",
+    "system2_id": "sys-3",
+    "configuration_details": {
+      "selected_contracts": [
+        "cont-1",
+        "cont-2"
+      ],
+      "dr_ids": [
+        "dr-1",
+        "dr-2"
+      ],
+      "dw_ids": [
+        "dw-1",
+        "dw-2"
+      ]
+    },
+    "created_at": "2026-05-14T19:43:58.931Z"
+  }
+]
