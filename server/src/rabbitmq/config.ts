@@ -8,15 +8,15 @@ export const RABBITMQ_CONFIG = {
 // Exchange: one direct exchange for all simulation commands
 export const EXCHANGE = {
   name: 'simulata.exchange',
-  type: 'direct',
+  type: 'topic',
   options: { durable: true },
 } as const;
 
 // Queue consumed by the Python service
 export const QUEUES = {
-  simulationRun: {
-    name: 'simulata.simulation.run',
-    routingKey: 'simulation.run',
+  generator_queue: {
+    name: 'generator_queue',
+    routingKey: 'generator_queue_key',
     options: { durable: true },
   },
 } as const;

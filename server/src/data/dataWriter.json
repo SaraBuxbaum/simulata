@@ -10,7 +10,7 @@
     "data_writer_id": "dw-2",
     "contract_config_id": "cont-2",
     "name": "Status_Broadcaster",
-    "message_count": 100,
+    "message_count": 200,
     "message_frequency_hz": 5
   },
   {

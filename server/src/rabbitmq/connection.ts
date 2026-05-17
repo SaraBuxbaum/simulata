@@ -3,8 +3,8 @@ import { RABBITMQ_CONFIG, EXCHANGE, QUEUES } from './config.js';
 
 // ─── Singleton state ──────────────────────────────────────────────────────────
 
-let connection: Connection | null = null;
-let channel: Channel | null = null;
+let connection: Connection | any;
+let channel: Channel | any;
 let isConnecting = false;
 
 // ─── Setup: declare exchange + queue + binding ────────────────────────────────
@@ -27,11 +27,11 @@ export async function connect(): Promise<void> {
   try {
     console.log('[RabbitMQ] Connecting to', RABBITMQ_CONFIG.url);
     connection = await amqplib.connect(RABBITMQ_CONFIG.url);
-    channel = await connection.createChannel();
+    channel = await connection.createConfirmChannel();
 
     await setupTopology(channel);
 
-    connection.on('error', (err) => {
+    connection.on('error', (err: Error) => {
       console.error('[RabbitMQ] Connection error:', err.message);
       scheduleReconnect();
     });

@@ -58,5 +58,53 @@
     "start_time": "2026-05-14T19:58:02.843Z",
     "end_time": null,
     "results": null
+  },
+  {
+    "simulation_run_id": "68dc5049-9a53-4303-9039-cd4b192e140b",
+    "simulation_config_id": "sim-1",
+    "status": "Passed",
+    "start_time": "2026-05-15T07:53:47.899Z",
+    "end_time": "2026-05-15T07:53:52.899Z",
+    "results": null
+  },
+  {
+    "simulation_run_id": "5d641a4d-4874-4fdc-85b9-8e8fdc24db48",
+    "simulation_config_id": "sim-1",
+    "status": "Passed",
+    "start_time": "2026-05-15T07:53:49.742Z",
+    "end_time": "2026-05-15T07:53:54.742Z",
+    "results": null
+  },
+  {
+    "simulation_run_id": "2403700b-137b-4d0d-bfdd-3c623db4e864",
+    "simulation_config_id": "sim-5",
+    "status": "Passed",
+    "start_time": "2026-05-15T07:54:03.080Z",
+    "end_time": "2026-05-15T07:54:08.080Z",
+    "results": null
+  },
+  {
+    "simulation_run_id": "1b516804-b712-40f1-aa3b-062df4b21abe",
+    "simulation_config_id": "7dbba7f9-b773-45c9-adab-816b2587cff7",
+    "status": "Passed",
+    "start_time": "2026-05-15T07:57:35.265Z",
+    "end_time": "2026-05-15T07:57:40.265Z",
+    "results": null
+  },
+  {
+    "simulation_run_id": "f082e22d-9c31-4208-b22a-925b938b1b2e",
+    "simulation_config_id": "sim-1",
+    "status": "Completed",
+    "start_time": "2026-05-17T00:40:10.564Z",
+    "end_time": "2026-05-17T00:40:15.564Z",
+    "results": null
+  },
+  {
+    "simulation_run_id": "2161f664-3bb5-4f2c-9d48-3d70f98013c1",
+    "simulation_config_id": "sim-1",
+    "status": "Completed",
+    "start_time": "2026-05-17T00:40:19.624Z",
+    "end_time": "2026-05-17T00:40:24.624Z",
+    "results": null
   }
 ]

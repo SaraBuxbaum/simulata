@@ -118,5 +118,17 @@
       ]
     },
     "created_at": "2026-05-14T19:43:58.931Z"
+  },
+  {
+    "simulation_config_id": "7dbba7f9-b773-45c9-adab-816b2587cff7",
+    "scenario_name": "new-sim-sara",
+    "system1_id": "Intelligence_Database",
+    "system2_id": "Drone_Swarm_Controller",
+    "configuration_details": {
+      "selected_contracts": [],
+      "dr_ids": [],
+      "dw_ids": []
+    },
+    "created_at": "2026-05-15T07:56:03.289Z"
   }
 ]
