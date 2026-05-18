@@ -12,7 +12,7 @@ export class ContractResult {
   analyzedResult: AnalyzedSimulationResult;
 
   @ManyToOne(() => ContractConfig, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'contract_id' })
+  @JoinColumn({ name: 'contract_config_id' })
   contract: ContractConfig;
 
   @Column({ type: 'double precision', nullable: true })

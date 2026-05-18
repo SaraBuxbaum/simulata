@@ -12,7 +12,7 @@ export class LogsResult {
   simulationRun: SimulationRun;
 
   @ManyToOne(() => ContractConfig, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'contract_id' })
+  @JoinColumn({ name: 'contract_config_id' })
   contract: ContractConfig;
 
   @Column({ type: 'jsonb', nullable: true })

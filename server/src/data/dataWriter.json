@@ -1,37 +1,86 @@
 [
   {
-    "data_writer_id": "dw-1",
-    "contract_config_id": "cont-1",
-    "name": "Track_Publisher",
+    "data_reader_id": "dw-1",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Publisher_A",
     "message_count": 1000,
     "message_frequency_hz": 50
   },
   {
-    "data_writer_id": "dw-2",
-    "contract_config_id": "cont-2",
-    "name": "Status_Broadcaster",
-    "message_count": 200,
-    "message_frequency_hz": 5
+    "data_reader_id": "dw-2",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Publisher_B",
+    "message_count": 500,
+    "message_frequency_hz": 25
   },
   {
-    "data_writer_id": "dw-3",
-    "contract_config_id": "cont-3",
-    "name": "Command_Issuer",
-    "message_count": 50,
-    "message_frequency_hz": 2
+    "data_reader_id": "dw-3",
+    "contract_config_id": "cont-2-v1.0",
+    "name": "Track_Publisher_C",
+    "message_count": 100,
+    "message_frequency_hz": 10
   },
   {
-    "data_writer_id": "dw-4",
-    "contract_config_id": "cont-4",
-    "name": "Missile_Telemetry_Sender",
+    "data_reader_id": "dw-4",
+    "contract_config_id": "cont-3-v4.0",
+    "name": "Track_Publisher_D",
     "message_count": 5000,
     "message_frequency_hz": 100
   },
   {
-    "data_writer_id": "dw-5",
-    "contract_config_id": "cont-5",
-    "name": "Drone_State_Sender",
+    "data_reader_id": "dw-5",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Publisher_E",
     "message_count": 2000,
     "message_frequency_hz": 60
+  },
+{
+    "data_reader_id": "dw-6",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Publisher_F",
+    "message_count": 2000,
+    "message_frequency_hz": 70
+  },
+    {
+    "data_reader_id": "dw-7",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Publisher_G",
+    "message_count": 1000,
+    "message_frequency_hz": 50
+  },
+  {
+    "data_reader_id": "dw-8",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Publisher_H",
+    "message_count": 500,
+    "message_frequency_hz": 25
+  },
+  {
+    "data_reader_id": "dw-9",
+    "contract_config_id": "cont-2-v1.0",
+    "name": "Track_Publisher_I",
+    "message_count": 100,
+    "message_frequency_hz": 10
+  },
+  {
+    "data_reader_id": "dw-10",
+    "contract_config_id": "cont-3-v4.0",
+    "name": "Track_Publisher_J",
+    "message_count": 5000,
+    "message_frequency_hz": 100
+  },
+  {
+    "data_reader_id": "dw-11",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Publisher_K",
+    "message_count": 2000,
+    "message_frequency_hz": 60
+  },
+{
+    "data_reader_id": "dw-12",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Publisher_L",
+    "message_count": 2000,
+    "message_frequency_hz": 70
   }
 ]

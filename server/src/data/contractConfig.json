@@ -1,32 +1,50 @@
 [
-  {
-    "contract_config_id": "cont-1",
-    "system_id": "sys-1",
-    "name": "Track_Data_Protocol",
-    "version": "1.0"
+  { 
+    "contract_config_id": "cont-1-v1.2", 
+    "system_id": "sys-1", 
+    "name": "Target_Tracks_Feed", 
+    "version": "v1.2.0" 
   },
-  {
-    "contract_config_id": "cont-2",
-    "system_id": "sys-1",
-    "name": "Radar_Status_Protocol",
-    "version": "1.2"
+  { 
+    "contract_config_id": "cont-1-v1.3", 
+    "system_id": "sys-1", 
+    "name": "Target_Tracks_Feed", 
+    "version": "v1.3.0" 
   },
-  {
-    "contract_config_id": "cont-3",
-    "system_id": "sys-2",
-    "name": "Engage_Command_Protocol",
-    "version": "2.0"
+  { 
+    "contract_config_id": "cont-2-v1.0", 
+    "system_id": "sys-1", 
+    "name": "System_Status_Report", 
+    "version": "v1.0.0" 
   },
-  {
-    "contract_config_id": "cont-4",
-    "system_id": "sys-3",
-    "name": "Launch_Telemetry",
-    "version": "1.1"
+  { 
+    "contract_config_id": "cont-3-v4.0", 
+    "system_id": "sys-2", 
+    "name": "C2_Battle_Management", 
+    "version": "v4.0.0" 
   },
-  {
-    "contract_config_id": "cont-5",
-    "system_id": "sys-4",
-    "name": "UAV_Telemetry_Feed",
-    "version": "3.0"
+    { 
+    "contract_config_id": "cont-1-v1.2", 
+    "system_id": "sys-2", 
+    "name": "C2_Battle_Management", 
+    "version": "v1.2.0" 
+  },
+  { 
+    "contract_config_id": "cont-1-v1.3", 
+    "system_id": "sys-3", 
+    "name": "C4_Battle_Management", 
+    "version": "v1.3.0" 
+  },
+  { 
+    "contract_config_id": "cont-2-v1.0", 
+    "system_id": "sys-4", 
+    "name": "C5_Battle_Management", 
+    "version": "v1.0.0" 
+  },
+  { 
+    "contract_config_id": "cont-3-v4.0", 
+    "system_id": "sys-5", 
+    "name": "C6_Battle_Management", 
+    "version": "v4.0.0" 
   }
 ]

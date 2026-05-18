@@ -1,43 +1,85 @@
 [
   {
     "data_reader_id": "dr-1",
-    "contract_config_id": "cont-1",
+    "contract_config_id": "cont-1-v1.2",
     "name": "Track_Subscriber_A",
-    "message_count": 1000,
-    "message_frequency_hz": 50
+    "message_count": 1500,
+    "message_frequency_hz": 60
   },
   {
     "data_reader_id": "dr-2",
-    "contract_config_id": "cont-1",
+    "contract_config_id": "cont-1-v1.3",
     "name": "Track_Subscriber_B",
     "message_count": 500,
     "message_frequency_hz": 25
   },
   {
     "data_reader_id": "dr-3",
-    "contract_config_id": "cont-3",
-    "name": "Command_Listener",
+    "contract_config_id": "cont-2-v1.0",
+    "name": "Track_Subscriber_C",
     "message_count": 100,
     "message_frequency_hz": 10
   },
   {
     "data_reader_id": "dr-4",
-    "contract_config_id": "cont-4",
-    "name": "Telemetry_Monitor",
+    "contract_config_id": "cont-3-v4.0",
+    "name": "Track_Subscriber_D",
     "message_count": 5000,
     "message_frequency_hz": 100
   },
   {
     "data_reader_id": "dr-5",
-    "contract_config_id": "cont-5",
-    "name": "Drone_Data_Parser",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Subscriber_E",
     "message_count": 2000,
     "message_frequency_hz": 60
   },
-{
-    "data_reader_id": "dr-5",
-    "contract_config_id": "cont-2",
-    "name": "Drone_Data_Parser",
+  {
+    "data_reader_id": "dr-6",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Subscriber_F",
+    "message_count": 2000,
+    "message_frequency_hz": 70
+  },
+  {
+    "data_reader_id": "dr-7",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Subscriber_G",
+    "message_count": 1000,
+    "message_frequency_hz": 50
+  },
+  {
+    "data_reader_id": "dr-8",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Subscriber_H",
+    "message_count": 500,
+    "message_frequency_hz": 25
+  },
+  {
+    "data_reader_id": "dr-9",
+    "contract_config_id": "cont-2-v1.0",
+    "name": "Track_Subscriber_I",
+    "message_count": 100,
+    "message_frequency_hz": 10
+  },
+  {
+    "data_reader_id": "dr-10",
+    "contract_config_id": "cont-3-v4.0",
+    "name": "Track_Subscriber_J",
+    "message_count": 5000,
+    "message_frequency_hz": 100
+  },
+  {
+    "data_reader_id": "dr-11",
+    "contract_config_id": "cont-1-v1.2",
+    "name": "Track_Subscriber_K",
+    "message_count": 2000,
+    "message_frequency_hz": 60
+  },
+  {
+    "data_reader_id": "dr-12",
+    "contract_config_id": "cont-1-v1.3",
+    "name": "Track_Subscriber_L",
     "message_count": 2000,
     "message_frequency_hz": 70
   }

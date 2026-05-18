@@ -7,7 +7,7 @@ export class DataWriter {
   data_writer_id: string;
 
   @OneToOne(() => ContractConfig, (contract) => contract.dataWriter, { onDelete: 'CASCADE' })
-  @JoinColumn({ name: 'contract_id' })
+  @JoinColumn({ name: 'contract_config_id' })
   contract: ContractConfig;
 
   @Column({ type: 'int' })

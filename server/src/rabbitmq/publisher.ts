@@ -2,7 +2,7 @@ import amqplib from 'amqplib';
 import { getChannel } from './connection.js';
 import { EXCHANGE, QUEUES } from './config.js';
 import { buildSimulationRunMessage } from './builders/simulationBuilder.js';
-import { BaseRabbitMessage, SimulationRunPayload } from '../rabbitmq/types.js';
+import { BaseRabbitMessage, SimulationRunPayload, DataWriterPayload, DataReaderPayload } from '../rabbitmq/types.js';
 
 // מנוע שליחה גנרי לחלוטין לכל סוג הודעה עתידית במערכת
 export async function publishMessage<T>(routingKey: string, messageBody: BaseRabbitMessage<T>): Promise<BaseRabbitMessage<T>> {
@@ -15,7 +15,7 @@ export async function publishMessage<T>(routingKey: string, messageBody: BaseRab
       routingKey,
       payload,
       {
-        persistent: true, // ההודעה נשמרת פיזית בדיסק של השרת
+        persistent: true,
         contentType: 'application/json',
         messageId: messageBody.message_id,
         timestamp: Date.now(),
@@ -33,21 +33,26 @@ export async function publishMessage<T>(routingKey: string, messageBody: BaseRab
   });
 }
 
-// פונקציית שליחה ספציפית לסימולציות המשתמשת במנוע הגנרי
 export async function publishSimulationRun(
-  simulation: any,
-  runId: string,
-  system1Name: string,
-  system2Name: string,
-  messageCount: number,
-  messageFrequencyHz: number
-): Promise<BaseRabbitMessage<SimulationRunPayload>> {
-  
-  // 1. קריאה לבילדר הייעודי
-  const message = buildSimulationRunMessage(simulation, runId, system1Name, system2Name, messageCount, messageFrequencyHz);
-  
-  // 2. שליחה דרך המנוע הגנרי עם מפתח הניתוב המתאים
-  await publishMessage<SimulationRunPayload>(QUEUES.generator_queue.routingKey, message);
-  
-  return message;
+    simulation: any,
+    runId: string,
+    system1Name: string,
+    system2Name: string,
+    dataWritersArray: DataWriterPayload[], // מקבל מערך של כותבים
+    dataReadersArray: DataReaderPayload[]  // מקבל מערך של קוראים
+  ): Promise<BaseRabbitMessage<SimulationRunPayload>> {
+    
+    const message = buildSimulationRunMessage(
+        simulation, 
+        runId, 
+        system1Name, 
+        system2Name, 
+        dataWritersArray, 
+        dataReadersArray
+    );
+    
+    // 2. שליחה דרך המנוע הגנרי עם מפתח הניתוב המתאים
+    await publishMessage<SimulationRunPayload>(QUEUES.generator_queue.routingKey, message);
+    
+    return message;
 }

@@ -1,110 +1,49 @@
 [
   {
-    "simulation_run_id": "run-1",
-    "simulation_config_id": "sim-1",
-    "status": "Passed",
-    "start_time": "2026-05-14T08:05:00Z",
-    "end_time": "2026-05-14T08:10:00Z",
-    "results": {
-      "success_rate": 99.9,
-      "errors": 0
-    }
-  },
-  {
-    "simulation_run_id": "run-2",
-    "simulation_config_id": "sim-1",
-    "status": "Failed",
-    "start_time": "2026-05-14T08:20:00Z",
-    "end_time": "2026-05-14T08:21:00Z",
-    "results": {
-      "success_rate": 45,
-      "errors": 150
-    }
-  },
-  {
-    "simulation_run_id": "run-3",
-    "simulation_config_id": "sim-2",
-    "status": "Passed",
-    "start_time": "2026-05-14T09:20:00Z",
-    "end_time": "2026-05-14T09:25:00Z",
-    "results": {
-      "success_rate": 100,
-      "errors": 0
-    }
-  },
-  {
-    "simulation_run_id": "run-4",
-    "simulation_config_id": "sim-3",
-    "status": "In Progress",
-    "start_time": "2026-05-14T10:35:00Z",
-    "end_time": null,
-    "results": null
-  },
-  {
-    "simulation_run_id": "run-5",
-    "simulation_config_id": "sim-4",
-    "status": "Passed",
-    "start_time": "2026-05-14T11:50:00Z",
-    "end_time": "2026-05-14T12:00:00Z",
-    "results": {
-      "success_rate": 98.5,
-      "errors": 12
-    }
-  },
-  {
-    "simulation_run_id": "ead24187-4596-4ecb-8cd6-7fb64d1f7f02",
-    "simulation_config_id": "sim-4",
-    "status": "Passed",
-    "start_time": "2026-05-14T19:58:02.843Z",
-    "end_time": null,
-    "results": null
-  },
-  {
-    "simulation_run_id": "68dc5049-9a53-4303-9039-cd4b192e140b",
-    "simulation_config_id": "sim-1",
-    "status": "Passed",
-    "start_time": "2026-05-15T07:53:47.899Z",
-    "end_time": "2026-05-15T07:53:52.899Z",
-    "results": null
-  },
-  {
-    "simulation_run_id": "5d641a4d-4874-4fdc-85b9-8e8fdc24db48",
-    "simulation_config_id": "sim-1",
-    "status": "Passed",
-    "start_time": "2026-05-15T07:53:49.742Z",
-    "end_time": "2026-05-15T07:53:54.742Z",
-    "results": null
-  },
-  {
-    "simulation_run_id": "2403700b-137b-4d0d-bfdd-3c623db4e864",
-    "simulation_config_id": "sim-5",
-    "status": "Passed",
-    "start_time": "2026-05-15T07:54:03.080Z",
-    "end_time": "2026-05-15T07:54:08.080Z",
-    "results": null
-  },
-  {
-    "simulation_run_id": "1b516804-b712-40f1-aa3b-062df4b21abe",
-    "simulation_config_id": "7dbba7f9-b773-45c9-adab-816b2587cff7",
-    "status": "Passed",
-    "start_time": "2026-05-15T07:57:35.265Z",
-    "end_time": "2026-05-15T07:57:40.265Z",
-    "results": null
-  },
-  {
-    "simulation_run_id": "f082e22d-9c31-4208-b22a-925b938b1b2e",
+    "simulation_run_id": "a3856ce0-d131-48c2-91a5-9e858bf2201a",
     "simulation_config_id": "sim-1",
     "status": "Completed",
-    "start_time": "2026-05-17T00:40:10.564Z",
-    "end_time": "2026-05-17T00:40:15.564Z",
+    "start_time": "2026-05-18T09:51:31.109Z",
+    "end_time": "2026-05-18T09:51:36.109Z",
     "results": null
   },
   {
-    "simulation_run_id": "2161f664-3bb5-4f2c-9d48-3d70f98013c1",
+    "simulation_run_id": "adcff8e4-b82e-4737-8c95-cbdcf0361aed",
     "simulation_config_id": "sim-1",
     "status": "Completed",
-    "start_time": "2026-05-17T00:40:19.624Z",
-    "end_time": "2026-05-17T00:40:24.624Z",
-    "results": null
+    "start_time": "2026-05-18T10:00:32.397Z",
+    "end_time": "2026-05-18T10:00:37.397Z",
+    "results": {
+      "success_rate": 0,
+      "error": 0,
+      "messages_sent": 0,
+      "messages_received": 0
+    }
+  },
+  {
+    "simulation_run_id": "57bc93ca-ecf2-4925-90c9-c7ae15db1be9",
+    "simulation_config_id": "sim-1",
+    "status": "Completed",
+    "start_time": "2026-05-18T10:24:29.573Z",
+    "end_time": "2026-05-18T10:24:34.573Z",
+    "results": {
+      "success_rate": 0,
+      "error": 0,
+      "messages_sent": 0,
+      "messages_received": 0
+    }
+  },
+  {
+    "simulation_run_id": "0027ad0d-554a-4e79-a438-92f3f3bfc8ae",
+    "simulation_config_id": "sim-1",
+    "status": "Completed",
+    "start_time": "2026-05-18T10:36:11.059Z",
+    "end_time": "2026-05-18T10:36:16.059Z",
+    "results": {
+      "success_rate": 0,
+      "error": 0,
+      "messages_sent": 0,
+      "messages_received": 0
+    }
   }
 ]

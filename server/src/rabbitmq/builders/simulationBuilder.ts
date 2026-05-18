@@ -1,12 +1,12 @@
-import { BaseRabbitMessage, SimulationRunPayload } from '../types.js';
+import { BaseRabbitMessage, SimulationRunPayload, DataWriterPayload, DataReaderPayload } from '../../rabbitmq/types.js';
 
 export function buildSimulationRunMessage(
   simulation: any,
   runId: string,
   system1Name: string,
   system2Name: string,
-  messageCount: number,
-  messageFrequencyHz: number
+  dataWritersArray: DataWriterPayload[],
+  dataReadersArray: DataReaderPayload[] // <--- מקבל את הקוראים
 ): BaseRabbitMessage<SimulationRunPayload> {
   
   return {
@@ -18,8 +18,8 @@ export function buildSimulationRunMessage(
       scenario_name: simulation.scenario_name,
       system1_name: system1Name,
       system2_name: system2Name,
-      message_count: messageCount,
-      message_frequency_hz: messageFrequencyHz,
+      data_writers: dataWritersArray,
+      data_readers: dataReadersArray
     },
   };
 }

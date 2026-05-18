@@ -4,27 +4,54 @@ import { readData, writeData } from '../utils/readWriteData.js';
 import { v4 as uuidv4 } from 'uuid';
 
 async function populateSimulationData(simulationConfig: any) {
-    // 1. שליפת שמות המערכות מתוך קובץ המערכות
-    const systems = await readData('systems'); 
-    const system1 = systems.find((sys: any) => sys.system_id === simulationConfig.system1_id);
-    const system2 = systems.find((sys: any) => sys.system_id === simulationConfig.system2_id);
+    const systemsDB = await readData('systems'); 
+    
+    // שליפת מערך המערכות מתוך הקונפיגורציה
+    const configSystems = simulationConfig.configuration_details?.systems || [];
+
+    // דרישה: לקחת כרגע רק את שתי המערכות הראשונות במערך
+    const sys1Config = configSystems[0];
+    const sys2Config = configSystems[1];
+    
+    const system1 = sys1Config ? systemsDB.find((sys: any) => sys.system_id === sys1Config.system_id) : null;
+    const system2 = sys2Config ? systemsDB.find((sys: any) => sys.system_id === sys2Config.system_id) : null;
     
     const system1_name = system1 ? system1.name : 'Unknown System 1';
     const system2_name = system2 ? system2.name : 'Unknown System 2';
 
-    // 2. שליפת קצב וכמות ההודעות מתוך ה-Data Writer הראשון המוגדר בתצורה
-    const dataWriters = await readData('dataWriter');
-    const firstDwId = simulationConfig.configuration_details?.dw_ids?.[0];
-    const selectedDw = dataWriters.find((dw: any) => dw.data_writer_id === firstDwId);
+    const data_writers: any[] = [];
+    const data_readers: any[] = [];
 
-    const message_count = selectedDw ? Number(selectedDw.message_count) : 0;
-    const message_frequency_hz = selectedDw ? Number(selectedDw.message_frequency_hz) : 0;
+    // פונקציית עזר פנימית שממיינת את הישויות (entities) לקוראים וכותבים
+    const sortEntities = (entities: any[]) => {
+        if (!entities) return;
+        
+        entities.forEach((entity: any) => {
+            const mappedEntity = {
+                // ממפה entity_id לשם השדה הישן שהרביט מכיר
+                [entity.type === 'writer' ? 'data_writer_id' : 'data_reader_id']: entity.entity_id,
+                name: entity.name || 'Unknown',
+                message_count: Number(entity.message_count || 0),
+                message_frequency_hz: Number(entity.message_frequency_hz || 0)
+            };
+
+            if (entity.type === 'writer') {
+                data_writers.push(mappedEntity);
+            } else if (entity.type === 'reader') {
+                data_readers.push(mappedEntity);
+            }
+        });
+    };
+
+    // מיון הישויות של שתי המערכות הראשונות בלבד
+    if (sys1Config) sortEntities(sys1Config.entities);
+    if (sys2Config) sortEntities(sys2Config.entities);
 
     return {
         system1_name,
         system2_name,
-        message_count,
-        message_frequency_hz
+        data_writers,
+        data_readers 
     };
 }
 
@@ -38,7 +65,6 @@ export const SimulationRunController = {
         }
     },
 
-    //כרגע לא יהיה בזה כל כך שימוש- כי השם של הסימולציה הוא יוניקי ומהווה מזהה מעולה
     getBySimulationId: async (req: Request, res: Response) => {
         try {
             const { simulation_config_id } = req.params;
@@ -100,22 +126,25 @@ export const SimulationRunController = {
                 status: 'Running', 
                 start_time: startTime.toISOString(),
                 end_time: endTime.toISOString(),
-                results: null 
+                results: {
+                    success_rate: 0,
+                    error: 0,
+                    messages_sent: 0,    
+                    messages_received: 0   
+                }
             };
 
             console.log(`[SimulationRunController] Dispatching message to RabbitMQ for run_id: ${newRun.simulation_run_id}`);
             
-            // ד. שידור ההודעה בצורה מאובטחת ומסונכרנת לרביט (ממתין ל-ACK מהברוקר)
-            await publishSimulationRun(
-                simulationExists, 
-                newRun.simulation_run_id,
-                enrichedData.system1_name,
-                enrichedData.system2_name,
-                enrichedData.message_count,
-                enrichedData.message_frequency_hz
-            );
+            // await publishSimulationRun(
+            //     simulationExists, 
+            //     newRun.simulation_run_id,
+            //     enrichedData.system1_name,
+            //     enrichedData.system2_name,
+            //     enrichedData.data_writers,
+            //     enrichedData.data_readers 
+            // );
             
-            // ה. עדכון סטטוס הריצה ל-Completed ושמירה להיסטוריה רק לאחר הצלחת השידור
             newRun.status = 'Completed';
             const runs = await readData('simulationRuns');
             runs.push(newRun);

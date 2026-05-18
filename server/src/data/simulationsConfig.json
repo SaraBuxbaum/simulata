@@ -1,134 +1,43 @@
 [
   {
     "simulation_config_id": "sim-1",
-    "scenario_name": "Radar_to_C2_Test",
-    "system1_id": "sys-1",
-    "system2_id": "sys-2",
+    "scenario_name": "My_Awesome_Scenario_v1",
     "configuration_details": {
+      "latency_ms": 10,
+      "jitter_ms": 5,
       "selected_contracts": [
-        "cont-1",
-        "cont-3"
+        "cont-1-v1.2",
+        "cont-3-v4.0"
       ],
-      "dr_ids": [
-        "dr-1",
-        "dr-3"
-      ],
-      "dw_ids": [
-        "dw-1",
-        "dw-3"
+      "systems": [
+        {
+          "system_id": "sys-1",
+          "contract_config_id": "cont-1-v1.2",
+          "entities": [
+            {
+              "entity_id": "dw-1",
+              "name": "Track_Publisher_A",
+              "type": "writer",
+              "message_count": 1000,
+              "message_frequency_hz": 50
+            }
+          ]
+        },
+        {
+          "system_id": "sys-2",
+          "contract_config_id": "cont-3-v4.0",
+          "entities": [
+            {
+              "entity_id": "dr-4",
+              "name": "Track_Subscriber_D",
+              "type": "reader",
+              "message_count": 5000,
+              "message_frequency_hz": 100
+            }
+          ]
+        }
       ]
     },
-    "created_at": "2026-05-14T08:00:00Z"
-  },
-  {
-    "simulation_config_id": "sim-2",
-    "scenario_name": "C2_to_Weapon_Launch",
-    "system1_id": "sys-2",
-    "system2_id": "sys-3",
-    "configuration_details": {
-      "selected_contracts": [
-        "cont-3",
-        "cont-4"
-      ],
-      "dr_ids": [
-        "dr-3",
-        "dr-4"
-      ],
-      "dw_ids": [
-        "dw-3",
-        "dw-4"
-      ]
-    },
-    "created_at": "2026-05-14T09:15:00Z"
-  },
-  {
-    "simulation_config_id": "sim-3",
-    "scenario_name": "Drone_Swarm_Surveillance",
-    "system1_id": "sys-4",
-    "system2_id": "sys-5",
-    "configuration_details": {
-      "selected_contracts": [
-        "cont-5"
-      ],
-      "dr_ids": [
-        "dr-5"
-      ],
-      "dw_ids": [
-        "dw-5"
-      ]
-    },
-    "created_at": "2026-05-14T10:30:00Z"
-  },
-  {
-    "simulation_config_id": "sim-4",
-    "scenario_name": "Full_Stress_Test_Radar",
-    "system1_id": "sys-1",
-    "system2_id": "sys-5",
-    "configuration_details": {
-      "selected_contracts": [
-        "cont-1",
-        "cont-2"
-      ],
-      "dr_ids": [
-        "dr-1",
-        "dr-2"
-      ],
-      "dw_ids": [
-        "dw-1",
-        "dw-2"
-      ]
-    },
-    "created_at": "2026-05-14T11:45:00Z"
-  },
-  {
-    "simulation_config_id": "sim-5",
-    "scenario_name": "C2_Failover_Scenario",
-    "system1_id": "sys-2",
-    "system2_id": "sys-2",
-    "configuration_details": {
-      "selected_contracts": [
-        "cont-3"
-      ],
-      "dr_ids": [
-        "dr-3"
-      ],
-      "dw_ids": [
-        "dw-3"
-      ]
-    },
-    "created_at": "2026-05-14T12:00:00Z"
-  },
-  {
-    "simulation_config_id": "7486ff93-b521-4333-a786-cd095493c5a8",
-    "scenario_name": "Integration_Test_Radar_C2",
-    "system1_id": "sys-1",
-    "system2_id": "sys-3",
-    "configuration_details": {
-      "selected_contracts": [
-        "cont-1",
-        "cont-2"
-      ],
-      "dr_ids": [
-        "dr-1",
-        "dr-2"
-      ],
-      "dw_ids": [
-        "dw-1",
-        "dw-2"
-      ]
-    },
-    "created_at": "2026-05-14T19:43:58.931Z"
-  },
-  {
-    "simulation_config_id": "7dbba7f9-b773-45c9-adab-816b2587cff7",
-    "scenario_name": "new-sim-sara",
-    "system1_id": "Intelligence_Database",
-    "system2_id": "Drone_Swarm_Controller",
-    "configuration_details": {
-      "selected_contracts": [],
-      "dr_ids": [],
-      "dw_ids": []
-    },
-    "created_at": "2026-05-15T07:56:03.289Z"
+    "created_at": "2026-05-18T10:34:42.160Z"
   }
 ]
