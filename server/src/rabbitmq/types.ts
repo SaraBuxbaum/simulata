@@ -20,11 +20,19 @@ export interface DataReaderPayload {
   message_frequency_hz: number;
 }
 
-export interface SimulationRunPayload {
-  simulation_config_id: string;
-  scenario_name: string;
-  system1_name: string;
-  system2_name: string;
+export interface SimulatedSystem {
+  system_name: string;
+  dictionary_version: string;
+  abc_version: string;
+}
+
+export interface GeneratorCodePayload {
+  ip_address: string;
   data_writers: DataWriterPayload[]; 
   data_readers: DataReaderPayload[];
+}
+
+export interface GeneratorYamlPayload {
+  run_id: string;
+  simulated_systems: SimulatedSystem[];
 }

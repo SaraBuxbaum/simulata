@@ -1,12 +1,12 @@
 import amqplib from 'amqplib';
 import { getChannel } from './connection.js';
 import { EXCHANGE, QUEUES } from './config.js';
-import { buildSimulationRunMessage } from './builders/simulationBuilder.js';
-import { BaseRabbitMessage, SimulationRunPayload, DataWriterPayload, DataReaderPayload } from '../rabbitmq/types.js';
+import { buildGeneratorCodeMessage, buildGeneratorYamlMessage } from './builders/simulationBuilder.js';
+import {  BaseRabbitMessage,  GeneratorCodePayload,  GeneratorYamlPayload,
+          DataWriterPayload, DataReaderPayload,SimulatedSystem } from '../rabbitmq/types.js';
 
-// מנוע שליחה גנרי לחלוטין לכל סוג הודעה עתידית במערכת
-export async function publishMessage<T>(routingKey: string, messageBody: BaseRabbitMessage<T>): Promise<BaseRabbitMessage<T>> {
-  const channel = getChannel() as amqplib.ConfirmChannel; // המרה בטוחה לערוץ מאובטח
+export async function publishMessage <T> (routingKey: string, messageBody: BaseRabbitMessage<T>): Promise<BaseRabbitMessage<T>> {
+  const channel = getChannel() as amqplib.ConfirmChannel; 
   const payload = Buffer.from(JSON.stringify(messageBody));
 
   return new Promise((resolve, reject) => {
@@ -34,25 +34,33 @@ export async function publishMessage<T>(routingKey: string, messageBody: BaseRab
 }
 
 export async function publishSimulationRun(
-    simulation: any,
     runId: string,
-    system1Name: string,
-    system2Name: string,
-    dataWritersArray: DataWriterPayload[], // מקבל מערך של כותבים
-    dataReadersArray: DataReaderPayload[]  // מקבל מערך של קוראים
-  ): Promise<BaseRabbitMessage<SimulationRunPayload>> {
+    ipAddress: string,
+    dataWritersArray: DataWriterPayload[], 
+    dataReadersArray: DataReaderPayload[],
+    simulatedSystemsArray: SimulatedSystem[]
+  ): Promise<void> {
     
-    const message = buildSimulationRunMessage(
-        simulation, 
-        runId, 
-        system1Name, 
-        system2Name, 
-        dataWritersArray, 
-        dataReadersArray
+    const codeMessage = buildGeneratorCodeMessage(
+      runId, 
+      ipAddress, 
+      dataWritersArray, 
+      dataReadersArray
+    );
+
+    const yamlMessage = buildGeneratorYamlMessage(
+      runId, 
+      simulatedSystemsArray
     );
     
-    // 2. שליחה דרך המנוע הגנרי עם מפתח הניתוב המתאים
-    await publishMessage<SimulationRunPayload>(QUEUES.generator_queue.routingKey, message);
-    
-    return message;
+    try {
+      await Promise.all([
+        publishMessage<GeneratorCodePayload>(QUEUES.generator_code_queue.routingKey, codeMessage),
+        publishMessage<GeneratorYamlPayload>(QUEUES.generator_yaml_queue.routingKey, yamlMessage)
+      ]);
+      console.log(`[RabbitMQ] Successfully published code & yaml messages for runId=${runId}`);
+    } catch (err) {
+      console.error(`[RabbitMQ] Failed to publish simulation run messages for runId=${runId}`, err);
+      throw err; 
+    }
 }

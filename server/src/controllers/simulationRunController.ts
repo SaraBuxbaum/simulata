@@ -103,9 +103,12 @@ export const SimulationRunController = {
 
     runSimulation: async (req: Request, res: Response) => {
         try {
-            const { simulation_config_id } = req.body;
+            const { simulation_config_id, ip_address, simulated_systems } = req.body;
             
-            // א. שליפת ובדיקת קיום התצורה הבסיסית
+            if (!ip_address || !simulated_systems || !Array.isArray(simulated_systems)) {
+                return res.status(400).json({ message: 'Missing required parameters: ip_address or simulated_systems' });
+            }
+
             const simulations = await readData('simulationsConfig');
             const simulationExists = simulations.find((s: any) => s.simulation_config_id === simulation_config_id);
             
@@ -113,10 +116,8 @@ export const SimulationRunController = {
                 return res.status(404).json({ message: 'Simulation configuration not found' });
             }
 
-            // ב. שימוש בפונקציית העזר המבודדת לקבלת הנתונים המועשרים
             const enrichedData = await populateSimulationData(simulationExists);
 
-            // ג. הכנת אובייקט הריצה החדש בסטטוס ראשוני
             const startTime = new Date();
             const endTime = new Date(startTime.getTime() + 5000); // ברירת מחדל של 5 שניות התמהמהות
             
@@ -134,30 +135,29 @@ export const SimulationRunController = {
                 }
             };
 
-            console.log(`[SimulationRunController] Dispatching message to RabbitMQ for run_id: ${newRun.simulation_run_id}`);
+            console.log(`[SimulationRunController] Dispatching messages to RabbitMQ queues for run_id: ${newRun.simulation_run_id}`);
             
-            // await publishSimulationRun(
-            //     simulationExists, 
-            //     newRun.simulation_run_id,
-            //     enrichedData.system1_name,
-            //     enrichedData.system2_name,
-            //     enrichedData.data_writers,
-            //     enrichedData.data_readers 
-            // );
+            await publishSimulationRun(
+                newRun.simulation_run_id,      
+                ip_address,                    
+                enrichedData.data_writers,     
+                enrichedData.data_readers,     
+                simulated_systems              
+            );
             
-            newRun.status = 'Completed';
+            newRun.status = 'Completed'; 
             const runs = await readData('simulationRuns');
             runs.push(newRun);
             await writeData('simulationRuns', runs);
 
-            res.status(201).json({ 
-                message: 'Simulation run triggered, verified by RabbitMQ, and logged successfully', 
+            return res.status(201).json({ 
+                message: 'Simulation run triggered, verified by RabbitMQ (Code & YAML), and logged successfully', 
                 run: newRun 
             });
 
         } catch (error) {
-            console.error("💥 Critical error during simulation dispatch:", error);
-            res.status(500).json({ message: 'Simulation failed to start due to internal pipeline infrastructure issue' });
+            console.error("Critical error during simulation dispatch:", error);
+            return res.status(500).json({ message: 'Simulation failed to start due to internal pipeline infrastructure issue' });
         }
     }
 };
