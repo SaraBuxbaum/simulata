@@ -1,27 +1,28 @@
-// ─── RabbitMQ Configuration ───────────────────────────────────────────────────
-
 export const RABBITMQ_CONFIG = {
   url: process.env.RABBITMQ_URL ?? 'amqp://guest:guest@localhost:5672',
   reconnectDelayMs: 5000,
 } as const;
 
-// Exchange: one direct exchange for all simulation commands
 export const EXCHANGE = {
   name: 'simulata.exchange',
-  type: 'topic', // מומלץ להישאר עם topic או direct
+  type: 'topic',
   options: { durable: true },
 } as const;
 
-// Queues consumed by the Python service / Ansible
 export const QUEUES = {
-  generator_code_queue: {
-    name: 'generator_code_queue',
-    routingKey: 'generator_code_key',
+  code_generator_queue: {
+    name: 'code_generator_queue',
+    routingKey: 'code_generator_key',
     options: { durable: true },
   },
-  generator_yaml_queue: {
-    name: 'generator_yaml_queue',
-    routingKey: 'generator_yaml_key',
+  configuration_generator_queue: {
+    name: 'configuration_generator_queue',
+    routingKey: 'configuration_generator_key',
     options: { durable: true },
   },
+  code_completed_queue: {
+    name: 'code_completed_queue',
+    routingKey: 'code_completed_key',
+    options: { durable: true },
+  }
 } as const;

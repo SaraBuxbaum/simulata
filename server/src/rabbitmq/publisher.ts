@@ -1,9 +1,8 @@
 import amqplib from 'amqplib';
 import { getChannel } from './connection.js';
 import { EXCHANGE, QUEUES } from './config.js';
-import { buildGeneratorCodeMessage, buildGeneratorYamlMessage } from './builders/simulationBuilder.js';
-import {  BaseRabbitMessage,  GeneratorCodePayload,  GeneratorYamlPayload,
-          DataWriterPayload, DataReaderPayload,SimulatedSystem } from '../rabbitmq/types.js';
+import { buildCodeGeneratorMessage, buildConfigurationGeneratorMessage } from './builders/simulationBuilder.js';
+import { BaseRabbitMessage, CodeGeneratorPayload, ConfigurationGeneratorPayload, SimulatedSystem } from '../rabbitmq/types.js';
 
 export async function publishMessage <T> (routingKey: string, messageBody: BaseRabbitMessage<T>): Promise<BaseRabbitMessage<T>> {
   const channel = getChannel() as amqplib.ConfirmChannel; 
@@ -33,34 +32,14 @@ export async function publishMessage <T> (routingKey: string, messageBody: BaseR
   });
 }
 
-export async function publishSimulationRun(
-    runId: string,
-    ipAddress: string,
-    dataWritersArray: DataWriterPayload[], 
-    dataReadersArray: DataReaderPayload[],
-    simulatedSystemsArray: SimulatedSystem[]
-  ): Promise<void> {
-    
-    const codeMessage = buildGeneratorCodeMessage(
-      runId, 
-      ipAddress, 
-      dataWritersArray, 
-      dataReadersArray
-    );
+export async function publishCodeGeneration(runId: string, target: string, messageCount: number ): Promise<void> {
+  const message = buildCodeGeneratorMessage(runId, target, messageCount);
+  await publishMessage(QUEUES.code_generator_queue.routingKey, message);
+  console.log(`[RabbitMQ] Published CODE generation request for runId=${runId}`);
+}
 
-    const yamlMessage = buildGeneratorYamlMessage(
-      runId, 
-      simulatedSystemsArray
-    );
-    
-    try {
-      await Promise.all([
-        publishMessage<GeneratorCodePayload>(QUEUES.generator_code_queue.routingKey, codeMessage),
-        publishMessage<GeneratorYamlPayload>(QUEUES.generator_yaml_queue.routingKey, yamlMessage)
-      ]);
-      console.log(`[RabbitMQ] Successfully published code & yaml messages for runId=${runId}`);
-    } catch (err) {
-      console.error(`[RabbitMQ] Failed to publish simulation run messages for runId=${runId}`, err);
-      throw err; 
-    }
+export async function publishConfigurationGeneration(runId: string, simulatedSystems: any[]): Promise<void> {
+  const message = buildConfigurationGeneratorMessage(runId, simulatedSystems);
+  await publishMessage(QUEUES.configuration_generator_queue.routingKey, message);
+  console.log(`[RabbitMQ] Published YAML generation request for runId=${runId}`);
 }

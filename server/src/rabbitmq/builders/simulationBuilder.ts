@@ -1,38 +1,37 @@
-import { 
-  BaseRabbitMessage, 
-  GeneratorCodePayload, 
-  GeneratorYamlPayload, 
-  DataWriterPayload, 
-  DataReaderPayload, 
-  SimulatedSystem 
-} from '../../rabbitmq/types.js';
+import { BaseRabbitMessage,
+         DataWriterPayload,
+         DataReaderPayload,
+         CodeGeneratorPayload,
+         ConfigurationGeneratorPayload,
+         SimulatedSystem } from '../types.js';
 
-export function buildGeneratorCodeMessage(
+export function buildCodeGeneratorMessage(
   runId: string,
-  ipAddress: string,
-  dataWritersArray: DataWriterPayload[],
-  dataReadersArray: DataReaderPayload[] 
-): BaseRabbitMessage<GeneratorCodePayload> {
+  target: string,
+  messageCount: number
+  // dataWritersArray: DataWriterPayload[],
+  // dataReadersArray: DataReaderPayload[] 
+): BaseRabbitMessage<CodeGeneratorPayload> {
   
   return {
     event: 'simulation.run.code',
     message_id: runId, // מזהה ההרצה משמש גם כמזהה ההודעה למעקב
     triggered_at: new Date().toISOString(),
     payload: {
-      ip_address: ipAddress,
-      data_writers: dataWritersArray,
-      data_readers: dataReadersArray
+      target: target, messageCount
+      // data_writers: dataWritersArray,
+      // data_readers: dataReadersArray
     },
   };
 }
 
-export function buildGeneratorYamlMessage(
+export function buildConfigurationGeneratorMessage(
   runId: string,
   simulatedSystemsArray: SimulatedSystem[]
-): BaseRabbitMessage<GeneratorYamlPayload> {
+): BaseRabbitMessage<ConfigurationGeneratorPayload> {
   
   return {
-    event: 'simulation.run.yaml',
+    event: 'simulation.run.config',
     message_id: runId,
     triggered_at: new Date().toISOString(),
     payload: {

@@ -1,4 +1,3 @@
-// מעטפת הודעה גנרית לכל המערכת
 export interface BaseRabbitMessage<T> {
   event: string;
   message_id: string;
@@ -21,18 +20,24 @@ export interface DataReaderPayload {
 }
 
 export interface SimulatedSystem {
-  system_name: string;
-  dictionary_version: string;
-  abc_version: string;
+  name: string;
+  ostemplatename: string;
 }
 
-export interface GeneratorCodePayload {
-  ip_address: string;
-  data_writers: DataWriterPayload[]; 
-  data_readers: DataReaderPayload[];
+export interface CodeGeneratorPayload {
+  target: string;
+  messageCount: number;
 }
 
-export interface GeneratorYamlPayload {
+
+export interface ConfigurationGeneratorPayload {
   run_id: string;
   simulated_systems: SimulatedSystem[];
+}
+
+//----Consumer-----
+
+export interface CodeCompletedPayload {
+  run_id: string;
+  status: string;
 }

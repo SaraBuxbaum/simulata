@@ -1,5 +1,5 @@
 import { Request, Response } from 'express';
-import { publishSimulationRun } from '../rabbitmq/index.js';  
+import { publishCodeGeneration } from '../rabbitmq/index.js';  
 import { readData, writeData } from '../utils/readWriteData.js';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -103,7 +103,7 @@ export const SimulationRunController = {
 
     runSimulation: async (req: Request, res: Response) => {
         try {
-            const { simulation_config_id, ip_address, simulated_systems } = req.body;
+            const { simulation_config_id, ip_address="10.56.49.227", simulated_systems } = req.body;
             
             if (!ip_address || !simulated_systems || !Array.isArray(simulated_systems)) {
                 return res.status(400).json({ message: 'Missing required parameters: ip_address or simulated_systems' });
@@ -117,47 +117,42 @@ export const SimulationRunController = {
             }
 
             const enrichedData = await populateSimulationData(simulationExists);
-
+            const messageCount = enrichedData.data_writers?.[0]?.message_count || 0;
             const startTime = new Date();
             const endTime = new Date(startTime.getTime() + 5000); // ברירת מחדל של 5 שניות התמהמהות
             
             const newRun = {
                 simulation_run_id: uuidv4(),
                 simulation_config_id,
-                status: 'Running', 
-                start_time: startTime.toISOString(),
-                end_time: endTime.toISOString(),
-                results: {
-                    success_rate: 0,
-                    error: 0,
-                    messages_sent: 0,    
-                    messages_received: 0   
-                }
+                status: 'inProgress',
+                pipeline_stage: 'Code_Generation',
+                start_time: new Date().toISOString(),
+                ip_address,
+                simulated_systems,
+                results: { success_rate: 0, error: 0, messages_sent: 0, messages_received: 0 }
             };
 
-            console.log(`[SimulationRunController] Dispatching messages to RabbitMQ queues for run_id: ${newRun.simulation_run_id}`);
-            
-            await publishSimulationRun(
-                newRun.simulation_run_id,      
-                ip_address,                    
-                enrichedData.data_writers,     
-                enrichedData.data_readers,     
-                simulated_systems              
-            );
-            
-            newRun.status = 'Completed'; 
             const runs = await readData('simulationRuns');
             runs.push(newRun);
             await writeData('simulationRuns', runs);
+            console.log(`[SimulationRunController] Dispatching messages to RabbitMQ queues for run_id: ${newRun.simulation_run_id}`);
+            
+            await publishCodeGeneration(
+                newRun.simulation_run_id,
+                ip_address,
+                messageCount
+            );
+            
+            // newRun.status = 'Completed'; 
 
             return res.status(201).json({ 
-                message: 'Simulation run triggered, verified by RabbitMQ (Code & YAML), and logged successfully', 
-                run: newRun 
+                message: 'Code generation started successfully. Waiting for Python to complete.', 
+                run_id: newRun.simulation_run_id 
             });
 
         } catch (error) {
-            console.error("Critical error during simulation dispatch:", error);
-            return res.status(500).json({ message: 'Simulation failed to start due to internal pipeline infrastructure issue' });
+            console.error("Critical error:", error);
+            return res.status(500).json({ message: 'Internal Server Error' });
         }
     }
 };
