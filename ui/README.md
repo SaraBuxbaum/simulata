@@ -1,6 +1,6 @@
 # Simulata UI
 
-Simulata UI is a professional, high-fidelity user interface built to monitor and manage end-to-end integration simulation testing for combat and mission-critical systems. 
+Simulata UI is a professional, high-fidelity user interface built to monitor and manage end-to-end integration simulation testing for mission-critical systems. 
 
 This frontend dashboard is fully responsive, aligned with our official Figma design specifications, and tailored for real-time visualization of simulation states, run histories, and system profiles.
 
